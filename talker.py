@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+#code by Alexander Grau http://grauonline.de/wordpress/
 ros = True
 
 import time, math, random
