@@ -12,25 +12,25 @@ def talker():
     # going to home pos...
     rospy.loginfo("home pos...")
     last_pos = 0  # home pos    
-    pubSpeed.publish(1000)
+    pubSpeed.publish(500)
     pubPos.publish(last_pos)
     rospy.sleep(5)     
-    degreePerRevolution = 3600  # one gearbox rotation in motor degree (0..3600)
-    range = 180  # desired gearbox limit (0..360)    
-    T = 5 # time for one sinus cycle (seconds)
+    degreePerRevolution = 2160  # one gearbox rotation in motor degree (0..3600)
+    range = 360  # desired gearbox limit (0..360)    
+    T = 0.5 # time for one sinus cycle (seconds)
     freq = 1/T                
     rangeMotor = degreePerRevolution/360*range
     last_time = rospy.get_time()
     
     while not rospy.is_shutdown():                
         now = rospy.get_time()                        
-        set_pos = math.sin(2*math.pi* freq * now ) * rangeMotor/2 + rangeMotor/2                                     
+        set_pos = math.sin(1*math.pi* freq * now ) * rangeMotor/2 + rangeMotor/2                                     
         deltaPos = abs(set_pos - last_pos)        
         deltaTime = abs(now - last_time)
         #rpm = 5000
         rpm = (deltaPos/degreePerRevolution) / deltaTime * 60
         rospy.loginfo("pos %d speed %d" % (set_pos, rpm) )
-        pubSpeed.publish(speed)
+        pubSpeed.publish(rpm)
         pubPos.publish(set_pos/ 180.0 * math.pi)
         last_pos = set_pos
         last_time = now
