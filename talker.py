@@ -11,11 +11,11 @@ if ros:
   from std_msgs.msg import Int32, Float32, Float64, String
 
 
-T = 2                        # time for one sinus cycle (seconds)
-maxRPM = 8000                # max motor RPM
+T = 3                       # time for one sinus cycle (seconds)
+maxRPM = 10000                # max motor RPM
 homePos = 0                 # motor home pos    
 degreePerRevolution = 2160   # one gearbox rotation in motor degree (0..3600)
-range = 3600                  # desired gearbox limit (0..360)    
+range = 180                  # desired gearbox limit (0..360)    
 currPos = 0
 
 
@@ -74,10 +74,10 @@ def talker():
       pubSpeed = rospy.Publisher('commands/motor/setspeed', Float64, queue_size=10)
       pubPos   = rospy.Publisher('commands/motor/position', Float64, queue_size=10)
       rospy.init_node('talker', anonymous=True)
-      rate = rospy.Rate(50) # 10hz    
+      rate = rospy.Rate(10) # 10hz    
       # going to home pos...
       rospy.loginfo("home pos...")   
-      pubSpeed.publish(1000)
+      pubSpeed.publish(500)
       pubPos.publish(homePos)
       rospy.sleep(5)         
       lastTime = rospy.get_time()
@@ -101,7 +101,8 @@ def talker():
       deltaTime = max(0.0001, abs(now - lastTime))                
       #rpm = 5000        
       rpm = min(maxRPM, (deltaPos/360.0) / deltaTime * 60)                
-      #print(str(deltaPos) + ", " + str(rpm))      
+      #print(str(deltaPos) + ", " + str(rpm)) 
+	     
       
       if ros:
         #rospy.loginfo("pos %d speed %d" % (setPos, rpm) )
